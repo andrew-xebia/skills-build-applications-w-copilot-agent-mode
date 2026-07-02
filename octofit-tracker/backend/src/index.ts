@@ -1,10 +1,9 @@
 import express, { type Request, type Response } from 'express';
-import mongoose from 'mongoose';
 import { Activity, Leaderboard, Team, User, Workout } from './models/index.js';
+import { connectToDatabase } from './database.js';
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 8000);
-const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/octofit_db';
 const codespaceName = process.env.CODESPACE_NAME;
 export const apiBaseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
@@ -12,7 +11,7 @@ export const apiBaseUrl = codespaceName
 
 app.use(express.json());
 
-const handleCreate = async <T>(Model: mongoose.Model<T>, body: Partial<T>, res: Response) => {
+const handleCreate = async <T>(Model: { create: (value: Partial<T>) => Promise<T> }, body: Partial<T>, res: Response) => {
   try {
     const created = await Model.create(body);
     res.status(201).json(created);
@@ -76,7 +75,7 @@ app.post(['/api/workouts', '/api/workouts/'], async (req: Request, res: Response
 
 async function startServer() {
   try {
-    await mongoose.connect(MONGO_URI);
+    await connectToDatabase();
     console.log('MongoDB connected');
   } catch (error) {
     console.warn('MongoDB connection unavailable, continuing without database:', error);
