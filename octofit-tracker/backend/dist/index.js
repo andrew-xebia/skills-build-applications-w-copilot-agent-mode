@@ -1,6 +1,6 @@
 import express from 'express';
 import { Activity, Leaderboard, Team, User, Workout } from './models/index.js';
-import { connectToDatabase } from './database.js';
+import { connectToDatabase } from './config/database.js';
 const app = express();
 const PORT = Number(process.env.PORT ?? 8000);
 const codespaceName = process.env.CODESPACE_NAME;

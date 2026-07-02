@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Activity, Leaderboard, Team, User, Workout } from '../models/index.js';
-import { connectToDatabase } from '../database.js';
+import { connectToDatabase } from '../config/database.js';
 async function seedDatabase() {
     console.log('Seed the octofit_db database with test data');
     await connectToDatabase();
